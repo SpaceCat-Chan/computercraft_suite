@@ -79,7 +79,8 @@ local amount_moved_forward = 0
 
 while amount_moved_forward < max_move_amount do
 	mine_surrounding_blocks()
-	turtle.dig()
+	repeat
+	until not turtle.dig()
 	turtle.forward()
 
 	if amount_moved_forward % 20 == 0 then
