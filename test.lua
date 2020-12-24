@@ -7,7 +7,7 @@ if ws then
 	local auth_json = JSON:decode(auth_message)
 	print(err)
 	local back = {
-		["request-id"] = auth_json["request-id"],
+		["request_id"] = auth_json["request_id"],
 		response = {}
 	}
 	local back_message = JSON:encode(back)
