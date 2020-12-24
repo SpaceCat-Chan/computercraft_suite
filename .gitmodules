@@ -1,6 +1,0 @@
-[submodule "WebsocketController/src/websocketpp"]
-	path = WebsocketController/src/websocketpp
-	url = https://github.com/zaphoyd/websocketpp.git
-[submodule "WebsocketController/src/nlohmann_json_cmake_fetchcontent"]
-	path = WebsocketController/src/nlohmann_json_cmake_fetchcontent
-	url = https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
