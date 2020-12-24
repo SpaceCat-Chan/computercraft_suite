@@ -476,7 +476,7 @@ do
                     if not unesc then error_at(pos + 1, "Unknown escape character %q.", c) end
                     buf[n], n, pos = unesc, n + 1, pos + 2
                 end
-            elseif c >= '\x20' then
+            elseif c >= '\x20' or c == ' ' then
                 buf[n], n, pos = c, n + 1, pos + 1
             else
                 error_at(pos + 1, "Unescaped whitespace %q.", c)
