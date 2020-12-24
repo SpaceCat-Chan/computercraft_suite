@@ -1,4 +1,4 @@
-require("textutils")
+require("JSON")
 
 local ws,err = http.websocket("ws://25.67.108.123")
 if ws then
