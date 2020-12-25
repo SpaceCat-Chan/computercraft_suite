@@ -31,7 +31,7 @@ function execute_command(command)
 	if command.request_type == "auth" then
 		return auth(command.token)
 	elseif command.request_type == "eval" then
-		eval(command.to_eval)
+		return eval(command.to_eval)
 	elseif command.request_type == "close" then
 		return nil, true
 	elseif command.request_type == "command buffer" then
