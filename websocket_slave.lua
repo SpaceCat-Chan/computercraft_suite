@@ -6,7 +6,8 @@ end
 
 function eval(to_eval)
 	local eval_function = loadstring(to_eval)
-	local error = false, error_message
+	local error = false
+	local error_message
 	local returns = {xpcall(eval_function, function(x) error = true error_message = x.."\n"..debug.traceback() end)}
 	return {
 		error = error,
