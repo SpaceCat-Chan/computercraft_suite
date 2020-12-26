@@ -1,4 +1,5 @@
 local JSON = require("JSON")
+local position = require("position_tracker")
 
 function auth(auth_string)
 	return {} -- this does nothing so far
@@ -58,7 +59,7 @@ while true do
 		if result then
 			local response = {
 				request_id = request.request_id,
-				content = result
+				response = result
 			}
 			local json_response = JSON:encode(response)
 			ws.send(json_response)
@@ -66,4 +67,5 @@ while true do
 		reconnect = should_reconnect
 	end
 	ws.close()
+	ws = nil
 end
