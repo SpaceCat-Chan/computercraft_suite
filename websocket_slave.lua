@@ -1,11 +1,11 @@
 local JSON = require("JSON")
-position_no = require("position_tracker")
+position = require("position_tracker")
 
 local arg = {...}
 do
 	local x, y, z, o = tonumber(arg[1]), tonumber(arg[2]), tonumber(arg[3]), tonumber(arg[4])
 	if x and y and z and o then
-		position_no.override(x, y, z, o)
+		position.override(x, y, z, o)
 	else
 		print("please provide numbers for location and orientation")
 		return
