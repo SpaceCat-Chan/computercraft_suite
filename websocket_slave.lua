@@ -9,7 +9,7 @@ end
 
 function eval(to_eval)
 	local eval_function = loadstring(to_eval)
-	setfenv(eval_function, _G)
+	setfenv(eval_function, getfenv())
 	local error = false
 	local error_message
 	local returns = {xpcall(eval_function, function(x) error = true error_message = x.."\n"..debug.traceback() end)}
@@ -47,7 +47,7 @@ function execute_command(command)
 end
 
 if arg[1] and arg[2] and arg[3] and arg[4] then
-	position.override(arg[1], arg[2], arg[3], arg[4])
+	position_no.override(arg[1], arg[2], arg[3], arg[4])
 end
 
 while true do
