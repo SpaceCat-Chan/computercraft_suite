@@ -2,6 +2,15 @@ local JSON = require("JSON")
 position_no = require("position_tracker")
 
 local arg = {...}
+do
+	local x, y, z, o = tonumber(arg[1]), tonumber(arg[2]), tonumber(arg[3]), tonumber(arg[4])
+	if x and y and z and o then
+		position_no.override(x, y, z, o)
+	else
+		print("please provide numbers for location and orientation")
+		return
+	end
+end
 
 function auth(auth_string)
 	return {} -- this does nothing so far
@@ -46,9 +55,6 @@ function execute_command(command)
 	end
 end
 
-if arg[1] and arg[2] and arg[3] and arg[4] then
-	position_no.override(arg[1], arg[2], arg[3], arg[4])
-end
 
 while true do
 	local ws
