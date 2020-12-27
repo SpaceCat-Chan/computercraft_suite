@@ -9,6 +9,7 @@ end
 
 function eval(to_eval)
 	local eval_function = loadstring(to_eval)
+	setfenv(eval_function, _G)
 	local error = false
 	local error_message
 	local returns = {xpcall(eval_function, function(x) error = true error_message = x.."\n"..debug.traceback() end)}
@@ -62,16 +63,13 @@ while true do
 		local json_request = ws.receive()
 		local request = JSON:decode(json_request)
 
-		print(json_request)
 		local result, should_reconnect = execute_command(request)
-		print(result)
 		if result then
 			local response = {
 				request_id = request.request_id,
 				response = result
 			}
 			local json_response = JSON:encode(response)
-			print("sending: ", json_response)
 			ws.send(json_response)
 		end
 		reconnect = should_reconnect
