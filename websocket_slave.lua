@@ -1,6 +1,8 @@
 local JSON = require("JSON")
 local position = require("position_tracker")
 
+local arg = {...}
+
 function auth(auth_string)
 	return {} -- this does nothing so far
 end
@@ -43,10 +45,15 @@ function execute_command(command)
 	end
 end
 
+if arg[1] and arg[2] and arg[3] and arg[4] then
+	position.override(arg[1], arg[2], arg[3], arg[4])
+end
+
 while true do
 	local ws
 	repeat
 		os.sleep(10)
+		print("attempt")
 		ws = http.websocket("ws://25.67.108.123")
 	until ws
 
