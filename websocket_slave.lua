@@ -63,12 +63,14 @@ while true do
 		local request = JSON:decode(json_request)
 
 		local result, should_reconnect = execute_command(request)
+		print(result)
 		if result then
 			local response = {
 				request_id = request.request_id,
 				response = result
 			}
 			local json_response = JSON:encode(response)
+			print("sending: ", json_response)
 			ws.send(json_response)
 		end
 		reconnect = should_reconnect
