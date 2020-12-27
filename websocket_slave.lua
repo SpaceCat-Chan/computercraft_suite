@@ -39,7 +39,7 @@ function execute_command(command)
 	elseif command.request_type == "close" then
 		return nil, true
 	elseif command.request_type == "command buffer" then
-		buffer(command)
+		return buffer(command)
 	else
 		return {error = true, error_message = "Unknown command: "..command.request_type}
 	end
@@ -62,6 +62,7 @@ while true do
 		local json_request = ws.receive()
 		local request = JSON:decode(json_request)
 
+		print(json_request)
 		local result, should_reconnect = execute_command(request)
 		print(result)
 		if result then
