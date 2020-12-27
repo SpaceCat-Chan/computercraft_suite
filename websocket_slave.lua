@@ -1,5 +1,5 @@
 local JSON = require("JSON")
-local position = require("position_tracker")
+position = require("position_tracker")
 
 local arg = {...}
 
