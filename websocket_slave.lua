@@ -41,6 +41,28 @@ function buffer(buffer)
 	return command_results, false
 end
 
+function inspect(direction)
+	local current_position = {position.get()}
+	local offset_x, offset_y, offset_z = 0,0,0
+	local block, found_block
+	if direction == "forward" then
+		found_block, block = turtle.inspect()
+		offset_x, offset_z = position.orientation_to_offset(current_position[4])
+	elseif direction == "up" then
+		found_block, block = turtle.inspectUp()
+		offset_y = 1
+	elseif direction == "down" then
+		found_block, block = turtle.inspectDown()
+		offset_y = -1
+	end
+
+	return {
+		found_block = found_block,
+		block = block,
+		position = {current_position[1] + offset_x, current_position[2] + offset_y, current_position[3] + offset_z}
+	}
+end
+
 function execute_command(command)
 	if command.request_type == "auth" then
 		return auth(command.token)
@@ -50,6 +72,8 @@ function execute_command(command)
 		return nil, true
 	elseif command.request_type == "command buffer" then
 		return buffer(command)
+	elseif command.request_type == "inspect" then
+		return inspect(command.direction)
 	else
 		return {error = true, error_message = "Unknown command: "..command.request_type}
 	end
@@ -79,6 +103,31 @@ while true do
 			ws.send(json_response)
 		end
 		reconnect = should_reconnect
+		if not reconnect then
+			local blocks = execute_command({
+				request_type = "command buffer",
+				commands = {
+					{
+						request_type = "inspect",
+						direction = "forward"
+					},
+					{
+						request_type = "inspect",
+						direction = "up"
+					},
+					{
+						request_type = "inspect",
+						direction = "down"
+					}
+				}
+			})
+			local response = {
+				request_id = -1,
+				response = blocks
+			}
+			local json_response = JSON:encode(response)
+			ws.send(json_response)
+		end
 	end
 	ws.close()
 	ws = nil
