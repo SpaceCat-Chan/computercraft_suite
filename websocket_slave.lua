@@ -87,7 +87,7 @@ function listen()
 	print("listen started")
 	while true do
 		if ws == nil then
-			os.sleep(0)
+			coroutine.yield()
 		else
 			print("waiting for message")
 			local request = ws.receive()
@@ -104,7 +104,7 @@ while true do
 		ws = http.websocket("ws://25.67.108.123")
 	until ws
 
-	sleep(0)
+	coroutine.yield()
 
 	local reconnect = false
 	while not reconnect do
@@ -150,8 +150,7 @@ while true do
 				ws.send(json_response)
 			end
 		else
-			print("sleeping")
-			os.sleep(1)
+			coroutine.yield()
 		end
 	end
 	ws.close()
