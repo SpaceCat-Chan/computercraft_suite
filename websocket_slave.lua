@@ -104,6 +104,7 @@ while true do
 	while not reconnect do
 		local json_request = requests[1]
 		if json_request ~= nil then
+			print("new request")
 			table.remove(requests, 1)
 			local request = JSON:decode(json_request)
 
@@ -143,7 +144,8 @@ while true do
 				ws.send(json_response)
 			end
 		else
-			os.sleep(0.5)
+			print("sleeping")
+			os.sleep(1)
 		end
 	end
 	ws.close()
