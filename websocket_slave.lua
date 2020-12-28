@@ -90,8 +90,11 @@ function listen()
 			coroutine.yield()
 		else
 			print("waiting for message")
-			local request = ws.receive()
-			table.insert(requests, request)
+			local request = ws.receive(1)
+			if request ~= nil then
+				print("recieved message")
+				table.insert(requests, request)
+			end
 		end
 	end
 end
