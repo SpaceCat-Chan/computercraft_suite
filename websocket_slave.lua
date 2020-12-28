@@ -161,4 +161,4 @@ while true do
 end
 end
 
-parallel.waitForAll(listen, handle)
+parallel.waitForAny(listen, handle)
