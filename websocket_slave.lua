@@ -87,8 +87,7 @@ function listen()
 	print("listen started")
 	while true do
 		if ws == nil then
-			print("listen sleep")
-			os.sleep(1)
+			os.sleep(0)
 		else
 			print("waiting for message")
 			local request = ws.receive()
@@ -104,6 +103,8 @@ while true do
 		print("attempt")
 		ws = http.websocket("ws://25.67.108.123")
 	until ws
+
+	sleep(0)
 
 	local reconnect = false
 	while not reconnect do
