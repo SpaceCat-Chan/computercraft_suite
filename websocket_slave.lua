@@ -90,11 +90,13 @@ function listen()
 			os.sleep(0)
 		else
 			os.sleep(0)
-			print("waiting for message")
-			local request = ws.receive(1)
-			if request ~= nil then
-				print("recieved message")
-				table.insert(requests, request)
+				if ws and ws ~= true then
+				print("waiting for message")
+				local request = ws.receive(1)
+				if request ~= nil then
+					print("recieved message")
+					table.insert(requests, request)
+				end
 			end
 		end
 	end
