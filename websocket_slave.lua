@@ -84,8 +84,10 @@ local requests = {}
 function listen()
 	while true do
 		if not ws then
+			print("listen sleep")
 			os.sleep(1)
 		else
+			print("waiting for message")
 			local request = ws.receive()
 			table.insert(requests, request)
 		end
@@ -153,4 +155,4 @@ while true do
 end
 end
 
-parallel.waitForAll(handle, listen)
+parallel.waitForAll(listen, handle)
