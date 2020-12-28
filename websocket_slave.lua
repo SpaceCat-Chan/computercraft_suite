@@ -89,6 +89,7 @@ function listen()
 		if ws == nil then
 			os.sleep(0)
 		else
+			os.sleep(0)
 			print("waiting for message")
 			local request = ws.receive(1)
 			if request ~= nil then
@@ -153,7 +154,6 @@ while true do
 				ws.send(json_response)
 			end
 		else
-			print("a")
 			os.sleep(0)
 		end
 	end
