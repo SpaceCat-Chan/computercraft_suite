@@ -79,9 +79,21 @@ function execute_command(command)
 	end
 end
 
+local requests = {}
 
+function listen()
+	while true do
+		if not ws then
+			os.sleep(1)
+		else
+			local request = ws.receive()
+			table.insert(requests, request)
+		end
+	end
+end
+
+function handle()
 while true do
-	local ws
 	repeat
 		os.sleep(10)
 		print("attempt")
@@ -90,45 +102,51 @@ while true do
 
 	local reconnect = false
 	while not reconnect do
-		local json_request = ws.receive()
-		local request = JSON:decode(json_request)
+		local json_request = requests[1]
+		if json_request ~= nil then
+			table.remove(requests, 1)
+			local request = JSON:decode(json_request)
 
-		local result, should_reconnect = execute_command(request)
-		if result then
-			local response = {
-				request_id = request.request_id,
-				response = result
-			}
-			local json_response = JSON:encode(response)
-			ws.send(json_response)
-		end
-		reconnect = should_reconnect
-		if not reconnect then
-			local blocks = execute_command({
-				request_type = "command buffer",
-				commands = {
-					{
-						request_type = "inspect",
-						direction = "forward"
-					},
-					{
-						request_type = "inspect",
-						direction = "up"
-					},
-					{
-						request_type = "inspect",
-						direction = "down"
-					}
+			local result, should_reconnect = execute_command(request)
+			if result then
+				local response = {
+					request_id = request.request_id,
+					response = result
 				}
-			})
-			local response = {
-				request_id = -1,
-				response = blocks
-			}
-			local json_response = JSON:encode(response)
-			ws.send(json_response)
+				local json_response = JSON:encode(response)
+				ws.send(json_response)
+			end
+			reconnect = should_reconnect
+			if not reconnect then
+				local blocks = execute_command({
+					request_type = "command buffer",
+					commands = {
+						{
+							request_type = "inspect",
+							direction = "forward"
+						},
+						{
+							request_type = "inspect",
+							direction = "up"
+						},
+						{
+							request_type = "inspect",
+							direction = "down"
+						}
+					}
+				})
+				local response = {
+					request_id = -1,
+					response = blocks
+				}
+				local json_response = JSON:encode(response)
+				ws.send(json_response)
+			end
 		end
 	end
 	ws.close()
 	ws = nil
 end
+end
+
+parallel.waitForAll(handle, listen)
