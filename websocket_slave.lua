@@ -142,6 +142,8 @@ while true do
 				local json_response = JSON:encode(response)
 				ws.send(json_response)
 			end
+		else
+			sleep(0.5)
 		end
 	end
 	ws.close()
