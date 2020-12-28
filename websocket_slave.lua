@@ -81,9 +81,12 @@ end
 
 local requests = {}
 
+local ws
+
 function listen()
+	print("listen started")
 	while true do
-		if not ws then
+		if ws == nil then
 			print("listen sleep")
 			os.sleep(1)
 		else
