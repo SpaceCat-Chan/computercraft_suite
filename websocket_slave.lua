@@ -143,7 +143,7 @@ while true do
 				ws.send(json_response)
 			end
 		else
-			sleep(0.5)
+			os.sleep(0.5)
 		end
 	end
 	ws.close()
