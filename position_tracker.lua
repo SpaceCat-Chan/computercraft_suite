@@ -1,3 +1,5 @@
+local JSON = require("JSON")
+
 local x, y, z, o
 
 local instance = {}
@@ -7,17 +9,20 @@ function instance.override(new_x, new_y, new_z, new_o)
 	y = new_y
 	z = new_z
 	o = new_o
+	instance.update_remote()
 end
 
 function instance.turnLeft()
 	o = o - 1
 	if o < 0 then o = o + 4 end
+	instance.update_remote()
 	return turtle.turnLeft()
 end
 
 function instance.turnRight()
 	o = o + 1
 	if o > 3 then o = o - 4 end
+	instance.update_remote()
 	return turtle.turnRight()
 end
 
@@ -44,6 +49,7 @@ function instance.forward()
 	if success then
 		local offset_x, offset_z = instance.orientation_to_offset(o)
 		x, z = x + offset_x, z + offset_z
+		instance.update_remote()
 	end
 	return success
 end
@@ -53,6 +59,7 @@ function instance.back()
 	if success then
 		local offset_x, offset_z = instance.orientation_to_offset(o)
 		x, z = x + -offset_x, z + -offset_z
+		instance.update_remote()
 	end
 	return success
 end
@@ -61,6 +68,7 @@ function instance.up()
 	local success = turtle.up()
 	if success then
 		y = y + 1
+		instance.update_remote()
 	end
 	return success
 end
@@ -69,12 +77,32 @@ function instance.down()
 	local success = turtle.down()
 	if success then
 		y = y - 1
+		instance.update_remote()
 	end
 	return success
 end
 
 function instance.get()
 	return x,y,z,o
+end
+
+function instance.register_websocket(ws)
+	instance.ws = ws
+end
+
+function instance.update_remote()
+	if instance.ws then
+		local info = {
+			request_id = -2,
+			response = {
+				x = x,
+				y = y,
+				z = z,
+				o = o
+			}
+		}
+		instance.ws.send(JSON:encode(info))
+	end
 end
 
 return instance

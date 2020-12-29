@@ -109,6 +109,7 @@ while true do
 		print("attempt")
 		ws = http.websocket("ws://25.67.108.123")
 	until ws
+	position.register_websocket(ws)
 
 	os.sleep(0)
 
@@ -161,6 +162,7 @@ while true do
 	end
 	ws.close()
 	ws = nil
+	position.register_websocket(ws)
 end
 end
 
