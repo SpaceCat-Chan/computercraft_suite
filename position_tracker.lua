@@ -102,6 +102,29 @@ function instance.update_remote()
 			}
 		}
 		instance.ws.send(JSON:encode(info))
+		local blocks = execute_command({
+			request_type = "command buffer",
+			commands = {
+				{
+					request_type = "inspect",
+					direction = "forward"
+				},
+				{
+					request_type = "inspect",
+					direction = "up"
+				},
+				{
+					request_type = "inspect",
+					direction = "down"
+				}
+			}
+		})
+		local response = {
+			request_id = -1,
+			response = blocks
+		}
+		local json_response = JSON:encode(response)
+		instance.ws.send(json_response)
 	end
 end
 

@@ -131,31 +131,6 @@ while true do
 				ws.send(json_response)
 			end
 			reconnect = should_reconnect
-			if not reconnect then
-				local blocks = execute_command({
-					request_type = "command buffer",
-					commands = {
-						{
-							request_type = "inspect",
-							direction = "forward"
-						},
-						{
-							request_type = "inspect",
-							direction = "up"
-						},
-						{
-							request_type = "inspect",
-							direction = "down"
-						}
-					}
-				})
-				local response = {
-					request_id = -1,
-					response = blocks
-				}
-				local json_response = JSON:encode(response)
-				ws.send(json_response)
-			end
 		else
 			os.sleep(0)
 		end
