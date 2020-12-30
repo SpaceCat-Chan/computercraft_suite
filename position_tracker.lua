@@ -15,15 +15,17 @@ end
 function instance.turnLeft()
 	o = o - 1
 	if o < 0 then o = o + 4 end
+	local result = turtle.turnLeft()
 	instance.update_remote()
-	return turtle.turnLeft()
+	return result
 end
 
 function instance.turnRight()
 	o = o + 1
 	if o > 3 then o = o - 4 end
+	local result = turtle.turnRight()
 	instance.update_remote()
-	return turtle.turnRight()
+	return result
 end
 
 function instance.orientation_to_offset(_o)
