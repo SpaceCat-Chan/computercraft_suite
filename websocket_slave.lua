@@ -107,7 +107,7 @@ while true do
 	repeat
 		os.sleep(10)
 		print("attempt")
-		ws = http.websocket("ws://25.67.108.123")
+		ws = http.websocket("ws://25.98.36.11")
 	until ws
 	position.register_websocket(ws)
 
