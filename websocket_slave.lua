@@ -3,16 +3,17 @@ position = require("position_tracker")
 
 local arg = {...}
 do
-	local x, y, z, o = tonumber(arg[1]), tonumber(arg[2]), tonumber(arg[3]), tonumber(arg[4])
-	if x and y and z and o then
-		position.override(x, y, z, o)
+	local x, y, z, o, dim, server = tonumber(arg[1]), tonumber(arg[2]), tonumber(arg[3]), tonumber(arg[4]), arg[5], arg[6]
+	if x and y and z and o and dim and server then
+		position.override(x, y, z, o, dim, server)
 	else
-		print("please provide numbers for location and orientation")
+		print("please provide numbers for location and orientation\n and provide names for the current dimension and server")
 		return
 	end
 end
 
 function auth(auth_string)
+	position.update_remote()
 	return {} -- this does nothing so far
 end
 
@@ -59,7 +60,9 @@ function inspect(direction)
 	return {
 		found_block = found_block,
 		block = block,
-		position = {current_position[1] + offset_x, current_position[2] + offset_y, current_position[3] + offset_z}
+		position = {current_position[1] + offset_x, current_position[2] + offset_y, current_position[3] + offset_z},
+		dimension = current_position[5],
+		server = current_position[6]
 	}
 end
 
