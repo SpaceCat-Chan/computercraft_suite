@@ -67,7 +67,7 @@ function inspect(direction)
 end
 
 function execute_command(command)
-	if command.request_type == "auth" then
+	if command.request_type == "authentication" then
 		return auth(command.token)
 	elseif command.request_type == "eval" then
 		return eval(command.to_eval)
