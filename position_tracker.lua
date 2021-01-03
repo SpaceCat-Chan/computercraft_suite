@@ -1,14 +1,16 @@
 local JSON = require("JSON")
 
-local x, y, z, o
+local x, y, z, o, dim, server
 
 local instance = {}
 
-function instance.override(new_x, new_y, new_z, new_o)
+function instance.override(new_x, new_y, new_z, new_o, new_dim, new_server)
 	x = new_x
 	y = new_y
 	z = new_z
 	o = new_o
+	dim = new_dim
+	server = new_server
 	instance.update_remote()
 end
 
@@ -85,7 +87,7 @@ function instance.down()
 end
 
 function instance.get()
-	return x,y,z,o
+	return x,y,z,o,dim,server
 end
 
 function instance.register_websocket(ws)
@@ -100,7 +102,9 @@ function instance.update_remote()
 				x = x,
 				y = y,
 				z = z,
-				o = o
+				o = o,
+				dimension = dim,
+				server = server
 			}
 		}
 		instance.ws.send(JSON:encode(info))
