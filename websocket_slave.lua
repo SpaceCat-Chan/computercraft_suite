@@ -95,7 +95,7 @@ function listen()
 			os.sleep(0)
 				if ws and ws ~= true then
 				print("waiting for message")
-				local success, request = pcall(ws.receive(1))
+				local success, request = pcall(ws.receive, 1)
 				if success and request ~= nil then
 					print("recieved message")
 					table.insert(requests, request)
