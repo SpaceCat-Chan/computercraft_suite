@@ -66,6 +66,31 @@ function inspect(direction)
 	}
 end
 
+function move(direction)
+	local success
+	if direction == "forward" then
+		success = position.forward()
+	elseif direction == "up" then
+		success = position.up()
+	elseif direction == "down" then
+		success = position.down()
+	end
+
+	return {
+		success = success
+	}
+end
+
+function rotate(direction)
+	if direction == "left" then
+		position.turnLeft()
+	elseif direction == "right" then
+		position.turnRight()
+	end
+
+	return {}
+end
+
 function execute_command(command)
 	if command.request_type == "authentication" then
 		return auth(command.token)
@@ -77,6 +102,10 @@ function execute_command(command)
 		return buffer(command)
 	elseif command.request_type == "inspect" then
 		return inspect(command.direction)
+	elseif command.request_type == "move" then
+		return move(command.direction)
+	elseif command.request_type == "rotate" then
+		return rotate(command.direction)
 	else
 		return {error = true, error_message = "Unknown command: "..command.request_type}
 	end
