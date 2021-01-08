@@ -114,6 +114,7 @@ end
 local requests = {}
 
 local ws
+local reconnect = false
 
 function listen()
 	print("listen started")
@@ -129,11 +130,9 @@ function listen()
 					if request ~= nil then
 						print("recieved message")
 						table.insert(requests, request)
-					else
-						print("AA: recieved nil")
 					end
 				else
-					print(request)
+					reconnect = true
 				end
 			end
 		end
@@ -151,7 +150,6 @@ while true do
 
 	os.sleep(0)
 
-	local reconnect = false
 	while not reconnect do
 		local json_request = requests[1]
 		if json_request ~= nil then
@@ -173,7 +171,7 @@ while true do
 			os.sleep(0)
 		end
 	end
-	ws.close()
+	pcall(ws.close)
 	ws = nil
 	position.register_websocket(ws)
 end
