@@ -125,9 +125,15 @@ function listen()
 				if ws and ws ~= true then
 				print("waiting for message")
 				local success, request = pcall(ws.receive, 1)
-				if success and request ~= nil then
-					print("recieved message")
-					table.insert(requests, request)
+				if success then
+					if request ~= nil then
+						print("recieved message")
+						table.insert(requests, request)
+					else
+						print("AA: recieved nil")
+					end
+				else
+					print(request)
 				end
 			end
 		end
