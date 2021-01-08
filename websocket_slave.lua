@@ -174,6 +174,7 @@ while true do
 	pcall(ws.close)
 	ws = nil
 	position.register_websocket(ws)
+	reconnect = false
 end
 end
 
