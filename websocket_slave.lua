@@ -164,7 +164,7 @@ while true do
 					response = result
 				}
 				local json_response = JSON:encode(response)
-				ws.send(json_response)
+				pcall(ws.send, json_response)
 			end
 			reconnect = should_reconnect
 		else
