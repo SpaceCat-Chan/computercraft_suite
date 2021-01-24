@@ -74,6 +74,10 @@ function move(direction)
 		success = position.up()
 	elseif direction == "down" then
 		success = position.down()
+	elseif direction == "back" then
+		success = position.back()
+	else
+		success = "unknown direction: "..type(direction).."("..tostring(direction)..")"
 	end
 
 	return {
