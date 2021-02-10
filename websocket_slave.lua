@@ -12,6 +12,8 @@ do
 	end
 end
 
+local null = {}
+
 function auth(auth_string)
 	position.update_remote()
 	return {} -- this does nothing so far
@@ -95,6 +97,41 @@ function rotate(direction)
 	return {}
 end
 
+function inventory(detailed)
+	local inventory = {}
+	for x=1,16 do
+		inventory[x] = turtle.getItemDetail(x, detailed)
+		if inventory[x] == nil then
+			inventory[x] = null
+		end
+	end
+	return inventory
+end
+
+function inventory_slot(slot, detailed)
+	return turtle.getItemDetail(slot, detailed)
+end
+
+function inventory_move(from, to, amount)
+	turtle.select(from)
+	turtle.transferTo(to, amount)
+end
+
+function drop_item(slot, direction, amount)
+	turtle.select(slot)
+	local success, error_message
+	if direction == "forward" then
+		success, error_message = turtle.drop(amount)
+	elseif direction == "up" then
+		success, error_message = turtle.dropUp(amount)
+	elseif direction == "down" then
+		success, error_message = turtle.dropDown(amount)
+	else
+		return {error = true, error_message = "unkown direction"}
+	end
+	return {error = not success, error_message = error_message}
+end
+
 function execute_command(command)
 	if command.request_type == "authentication" then
 		return auth(command.token)
@@ -110,6 +147,14 @@ function execute_command(command)
 		return move(command.direction)
 	elseif command.request_type == "rotate" then
 		return rotate(command.direction)
+	elseif command.request_type == "inventory" then
+		return inventory(command.detailed)
+	elseif command.request_type == "inventory_slot" then
+		return inventory_slot(command.slot, command.detailed)
+	elseif command.request_type == "inventory_move" then
+		return inventory_move(command.from, command.to, command.amount)
+	elseif command.request_type == "drop_item" then
+		return drop_item(command.slot, command.direction, command.amount)
 	else
 		return {error = true, error_message = "Unknown command: "..command.request_type}
 	end
@@ -167,7 +212,7 @@ while true do
 					request_id = request.request_id,
 					response = result
 				}
-				local json_response = JSON:encode(response)
+				local json_response = JSON:encode(response, nil, {null=null})
 				pcall(ws.send, json_response)
 			end
 			reconnect = should_reconnect
