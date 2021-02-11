@@ -114,7 +114,7 @@ end
 
 function inventory_move(from, to, amount)
 	turtle.select(from)
-	return turtle.transferTo(to, amount)
+	return {turtle.transferTo(to, amount)}
 end
 
 function drop_item(slot, direction, amount)
