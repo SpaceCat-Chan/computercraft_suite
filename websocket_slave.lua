@@ -114,7 +114,7 @@ end
 
 function inventory_move(from, to, amount)
 	turtle.select(from)
-	turtle.transferTo(to, amount)
+	return turtle.transferTo(to, amount)
 end
 
 function drop_item(slot, direction, amount)
@@ -177,7 +177,7 @@ function listen()
 			pcall(ws.send, JSON:encode{special=1})
 			local success, request = pcall(ws.receive)
 				if success then
-					if request ~= nil then
+					if request ~= nil and request ~= "wake_up" then
 						print("recieved message")
 						table.insert(requests, request)
 					end
