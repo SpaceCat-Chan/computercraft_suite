@@ -172,9 +172,10 @@ function listen()
 			os.sleep(0)
 		else
 			os.sleep(0)
-				if ws and ws ~= true then
-				print("waiting for message")
-				local success, request = pcall(ws.receive, 1)
+			if ws and ws ~= true then
+			print("waiting for message")
+			pcall(ws.send, JSON:encode{special=1})
+			local success, request = pcall(ws.receive)
 				if success then
 					if request ~= nil then
 						print("recieved message")
