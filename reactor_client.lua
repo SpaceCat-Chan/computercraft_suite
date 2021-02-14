@@ -50,7 +50,7 @@ while true do
 			elseif message.type == "getEnergyProducedLastTick" then
 				modem.transmit(42069, 6969, JSON:encode{getEnergyProducedLastTick = reactor.getEnergyProducedLastTick()})
 			elseif message.type == "getControlRodLevel" then
-				modem.transmit(42069, 6969, JSON:encode{getControlRodLevel = reactor.getControlRodLevel()})
+				modem.transmit(42069, 6969, JSON:encode{getControlRodLevel = reactor.getControlRodLevel(message.rod)})
 			elseif message.type == "getFuelConsumedLastTick" then
 				modem.transmit(42069, 6969, JSON:encode{getFuelConsumedLastTick = reactor.getFuelConsumedLastTick()})
 			end
