@@ -117,19 +117,32 @@ function inventory_move(from, to, amount)
 	return {turtle.transferTo(to, amount)}
 end
 
+function make_direction_function(functions)
+	return function(direction, ...)
+		local success, error_message
+		if functions[direction] then
+			success, error_message = functions[direction](...)
+		else
+			return {error = true, error_message = "unkown direction"}
+		end
+		return {error = not success, error_message = error_message}
+	end
+end
+
+drop_item_base = make_direction_function({forward = turtle.drop, up = turtle.dropUp, down = turtle.dropDown})
+
 function drop_item(slot, direction, amount)
 	turtle.select(slot)
-	local success, error_message
-	if direction == "forward" then
-		success, error_message = turtle.drop(amount)
-	elseif direction == "up" then
-		success, error_message = turtle.dropUp(amount)
-	elseif direction == "down" then
-		success, error_message = turtle.dropDown(amount)
-	else
-		return {error = true, error_message = "unkown direction"}
-	end
-	return {error = not success, error_message = error_message}
+	return drop_item_base(direction, amount)
+end
+
+pickup_item = make_direction_function{forward = turtle.suck, up = turtle.suckUp, down = turtle.suckDown}
+destroy_block = make_direction_function{forward = turtle.dig, up = turtle.digUp, down = turtle.digDown}
+place_block_base = make_direction_function{forward = turtle.place, up = turtle.placeUp, down = turtle.placeDown}
+
+function place_block(slot, direction)
+	turtle.select(slot)
+	return place_block_base(direction)
 end
 
 function execute_command(command)
@@ -155,6 +168,12 @@ function execute_command(command)
 		return inventory_move(command.from, command.to, command.amount)
 	elseif command.request_type == "drop_item" then
 		return drop_item(command.slot, command.direction, command.amount)
+	elseif command.request_type == "pickup_item" then
+		return pickup_item(command.direction)
+	elseif command.request_type == "break_block" then
+		return destroy_block(command.direction)
+	elseif command.request_type == "place_block" then
+		return place_block(command.slot, command.direction)
 	else
 		return {error = true, error_message = "Unknown command: "..command.request_type}
 	end
